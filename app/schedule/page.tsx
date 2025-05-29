@@ -237,11 +237,12 @@ export default function SchedulePage() {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className="p-1 h-auto" // bg-red- ni olib tashladim, agar kerak bo'lmasa
-                                  onClick={() => router.push(`/admin/dashboard/schedules/${item.id}/edit`)}
+                                  className="p-1 h-auto"
+                                  onClick={() => router.push(`/dashboard/schedules/${item.id}/edit`)}
                                 >
                                   <Edit className="h-3 w-3" />
                                 </Button>
+
                                 <Button
                                   variant="destructive"
                                   size="sm"
