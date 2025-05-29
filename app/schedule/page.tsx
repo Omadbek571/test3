@@ -52,8 +52,8 @@ export default function SchedulePage() {
 
   useEffect(() => {
     if (!token) {
-        if(!localStorage.getItem("token")) setLoading(false);
-        return;
+      if (!localStorage.getItem("token")) setLoading(false);
+      return;
     }
 
     setLoading(true)
@@ -81,15 +81,15 @@ export default function SchedulePage() {
 
         const jsToday = new Date().getDay()
         const apiTodayDayOfWeek = jsToday === 0 ? 7 : jsToday
-        
+
         setTodaySchedule(data.filter(item => item.day_of_week === apiTodayDayOfWeek))
       })
       .catch((err) => {
         console.error("Jadvalni yuklashda xatolik:", err)
         if (err.response && err.response.status === 401) {
-            setError("Sessiya muddati tugagan yoki token yaroqsiz. Iltimos, qayta login qiling.")
+          setError("Sessiya muddati tugagan yoki token yaroqsiz. Iltimos, qayta login qiling.")
         } else {
-            setError("Jadval ma'lumotlarini yuklab bo'lmadi. Server bilan bog'lanishda muammo.")
+          setError("Jadval ma'lumotlarini yuklab bo'lmadi. Server bilan bog'lanishda muammo.")
         }
       })
       .finally(() => {
@@ -99,8 +99,8 @@ export default function SchedulePage() {
 
   const handleDelete = (itemId: number) => {
     if (!token) {
-        setError("O'chirish uchun avtorizatsiya tokeni topilmadi.")
-        return
+      setError("O'chirish uchun avtorizatsiya tokeni topilmadi.")
+      return
     }
     if (window.confirm("Haqiqatan ham bu yozuvni o'chirmoqchimisiz?")) {
       axios
@@ -112,14 +112,14 @@ export default function SchedulePage() {
         .then(() => {
           setScheduleItems(prevItems => prevItems.filter(item => item.id !== itemId))
           setGroupedSchedule(prevGrouped => {
-              const newGrouped = { ...prevGrouped }
-              for (const dayKey in newGrouped) {
-                const dayNumber = parseInt(dayKey, 10)
-                if (!isNaN(dayNumber)) {
-                    newGrouped[dayNumber] = newGrouped[dayNumber].filter(item => item.id !== itemId)
-                }
+            const newGrouped = { ...prevGrouped }
+            for (const dayKey in newGrouped) {
+              const dayNumber = parseInt(dayKey, 10)
+              if (!isNaN(dayNumber)) {
+                newGrouped[dayNumber] = newGrouped[dayNumber].filter(item => item.id !== itemId)
               }
-              return newGrouped
+            }
+            return newGrouped
           });
           setTodaySchedule(prevToday => prevToday.filter(item => item.id !== itemId))
         })
@@ -147,7 +147,7 @@ export default function SchedulePage() {
   }
 
   const getTypeColor = (itemTypeDisplay: string) => {
-     const colors: Record<string, string> = {
+    const colors: Record<string, string> = {
       Dars: "bg-blue-50 text-blue-700 border-blue-200",
       Test: "bg-red-50 text-red-700 border-red-200",
       "Mustaqil ish": "bg-yellow-50 text-yellow-700 border-yellow-200",
@@ -186,7 +186,7 @@ export default function SchedulePage() {
 
         {error && (
           <div className="mb-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-md flex items-center">
-            <AlertCircle className="h-5 w-5 mr-2"/>
+            <AlertCircle className="h-5 w-5 mr-2" />
             {error}
           </div>
         )}
@@ -230,27 +230,27 @@ export default function SchedulePage() {
                               </div>
                             </div>
                             <div className="flex flex-col items-end space-y-1">
-                                <Badge variant="outline" className={getTypeColor(item.type_display)}>
+                              <Badge variant="outline" className={getTypeColor(item.type_display)}>
                                 {item.type_display}
-                                </Badge>
-                                <div className="flex gap-1 mt-1">
-                                    <Button 
-                                        variant="outline" 
-                                        size="sm" 
-                                        className="p-1 h-auto"
-                                        onClick={() => router.push(`/schedule/edit/${item.id}`)}
-                                    >
-                                        <Edit className="h-3 w-3" />
-                                    </Button>
-                                    <Button 
-                                        variant="destructive" 
-                                        size="sm" 
-                                        className="p-1 h-auto"
-                                        onClick={() => handleDelete(item.id)}
-                                    >
-                                        <Trash2 className="h-3 w-3" />
-                                    </Button>
-                                </div>
+                              </Badge>
+                              <div className="flex gap-1 mt-1">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="p-1 h-auto" // bg-red- ni olib tashladim, agar kerak bo'lmasa
+                                  onClick={() => router.push(`/admin/dashboard/schedules/${item.id}/edit`)}
+                                >
+                                  <Edit className="h-3 w-3" />
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  className="p-1 h-auto"
+                                  onClick={() => handleDelete(item.id)}
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                </Button>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -278,59 +278,59 @@ export default function SchedulePage() {
           </CardHeader>
           <CardContent>
             {todaySchedule.length > 0 ? (
-                <div className="space-y-4">
+              <div className="space-y-4">
                 {todaySchedule.map((item) => (
-                    <div key={item.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div key={item.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
                     <div className="flex justify-between items-start">
-                        <div className="flex items-center">
+                      <div className="flex items-center">
                         <div
-                            className={`w-10 h-10 rounded-full flex items-center justify-center mr-3 ${getSubjectColor(item.title)}`}
+                          className={`w-10 h-10 rounded-full flex items-center justify-center mr-3 ${getSubjectColor(item.title)}`}
                         >
-                            <Clock className="h-5 w-5" />
+                          <Clock className="h-5 w-5" />
                         </div>
                         <div>
-                            <h4 className="font-medium">{item.title}</h4>
-                            <div className="text-sm text-gray-500">
+                          <h4 className="font-medium">{item.title}</h4>
+                          <div className="text-sm text-gray-500">
                             {formatTime(item.start_time)} - {formatTime(item.end_time)}
-                            </div>
-                            {item.description && <p className="text-xs text-gray-400 mt-1">{item.description}</p>}
+                          </div>
+                          {item.description && <p className="text-xs text-gray-400 mt-1">{item.description}</p>}
                         </div>
+                      </div>
+                      <div className="flex flex-col items-end space-y-1">
+                        <Badge variant="outline" className={getTypeColor(item.type_display)}>
+                          {item.type_display}
+                        </Badge>
+                        <div className="flex gap-1 mt-1">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="p-1 h-auto"
+                            onClick={() => router.push(`/schedule/edit/${item.id}`)}
+                          >
+                            <Edit className="h-3 w-3" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            className="p-1 h-auto"
+                            onClick={() => handleDelete(item.id)}
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
                         </div>
-                        <div className="flex flex-col items-end space-y-1">
-                            <Badge variant="outline" className={getTypeColor(item.type_display)}>
-                            {item.type_display}
-                            </Badge>
-                            <div className="flex gap-1 mt-1">
-                                <Button 
-                                    variant="outline" 
-                                    size="sm" 
-                                    className="p-1 h-auto"
-                                    onClick={() => router.push(`/schedule/edit/${item.id}`)}
-                                >
-                                    <Edit className="h-3 w-3" />
-                                </Button>
-                                <Button 
-                                    variant="destructive" 
-                                    size="sm" 
-                                    className="p-1 h-auto"
-                                    onClick={() => handleDelete(item.id)}
-                                >
-                                    <Trash2 className="h-3 w-3" />
-                                </Button>
-                            </div>
-                        </div>
+                      </div>
                     </div>
-                    </div>
+                  </div>
                 ))}
-                </div>
+              </div>
             ) : (
-                <div className="text-center p-6 border border-dashed rounded-lg">
-                    <p className="text-gray-500">Bugun uchun yozuvlar yo'q.</p>
-                    <Button variant="outline" className="mt-2" onClick={() => router.push(`/schedule/create?today=true`)}>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Yozuv qo'shish
-                    </Button>
-                </div>
+              <div className="text-center p-6 border border-dashed rounded-lg">
+                <p className="text-gray-500">Bugun uchun yozuvlar yo'q.</p>
+                <Button variant="outline" className="mt-2" onClick={() => router.push(`/schedule/create?today=true`)}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Yozuv qo'shish
+                </Button>
+              </div>
             )}
           </CardContent>
         </Card>
